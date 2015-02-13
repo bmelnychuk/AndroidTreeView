@@ -2,10 +2,10 @@ package com.unnamed.b.atv.sample.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.sample.R;
@@ -20,14 +20,13 @@ import com.unnamed.b.atv.view.AndroidTreeView;
  * Created by Bogdan Melnychuk on 2/12/15.
  */
 public class CustomViewHolderFragment extends Fragment {
-    private TextView statusBar;
+    private AndroidTreeView tView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_default, null, false);
         final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
-        statusBar = (TextView) rootView.findViewById(R.id.status_bar);
-        statusBar.setVisibility(View.GONE);
+        rootView.findViewById(R.id.status_bar).setVisibility(View.GONE);
 
         final TreeNode root = TreeNode.root();
 
@@ -41,9 +40,16 @@ public class CustomViewHolderFragment extends Fragment {
         addProfileData(barry);
         root.addChildren(myProfile, bruce, barry, clark);
 
-        AndroidTreeView tView = new AndroidTreeView(getActivity(), root);
+        tView = new AndroidTreeView(getActivity(), root);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleDivided, true);
         containerView.addView(tView.getView());
+
+        if (savedInstanceState != null) {
+            String state = savedInstanceState.getString("tState");
+            if (!TextUtils.isEmpty(state)) {
+                tView.restoreState(state);
+            }
+        }
 
         return rootView;
     }
@@ -65,5 +71,9 @@ public class CustomViewHolderFragment extends Fragment {
         profile.addChildren(socialNetworks, places);
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("tState", tView.getSaveState());
+    }
 }

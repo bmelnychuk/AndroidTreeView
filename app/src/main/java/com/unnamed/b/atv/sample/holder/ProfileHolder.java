@@ -12,7 +12,7 @@ import com.unnamed.b.atv.sample.R;
 /**
  * Created by Bogdan Melnychuk on 2/13/15.
  */
-public class ProfileHolder extends TreeNode.BaseNodeViewHolder {
+public class ProfileHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
 
 
     public ProfileHolder(Context context) {
@@ -20,8 +20,7 @@ public class ProfileHolder extends TreeNode.BaseNodeViewHolder {
     }
 
     @Override
-    public View createNodeView(TreeNode node) {
-        final IconTreeItemHolder.IconTreeItem value = (IconTreeItemHolder.IconTreeItem) node.getValue();
+    public View createNodeView(TreeNode node, IconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.layout_profile_node, null, false);
         TextView tvValue = (TextView) view.findViewById(R.id.node_value);

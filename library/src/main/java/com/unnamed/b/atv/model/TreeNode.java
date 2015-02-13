@@ -167,7 +167,7 @@ public class TreeNode {
         void onClick(TreeNode node, Object value);
     }
 
-    public static abstract class BaseNodeViewHolder {
+    public static abstract class BaseNodeViewHolder<E> {
         private TreeNode mNode;
         private View mView;
         protected int containerStyle;
@@ -194,7 +194,7 @@ public class TreeNode {
         }
 
         public View getNodeView() {
-            return createNodeView(mNode);
+            return createNodeView(mNode, (E) mNode.getValue());
         }
 
         public ViewGroup getNodeItemsView() {
@@ -206,7 +206,7 @@ public class TreeNode {
         }
 
 
-        public abstract View createNodeView(TreeNode node);
+        public abstract View createNodeView(TreeNode node, E value);
 
         public abstract void toggle(boolean active);
     }

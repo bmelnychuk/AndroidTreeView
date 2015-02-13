@@ -14,7 +14,7 @@ import java.util.Random;
 /**
  * Created by Bogdan Melnychuk on 2/13/15.
  */
-public class SocialViewHolder extends TreeNode.BaseNodeViewHolder {
+public class SocialViewHolder extends TreeNode.BaseNodeViewHolder<SocialViewHolder.SocialItem> {
 
     private static final String[] NAMES = new String[]{"Bruce Wayne", "Clark Kent", "Barry Allen", "Hal Jordan"};
 
@@ -23,8 +23,7 @@ public class SocialViewHolder extends TreeNode.BaseNodeViewHolder {
     }
 
     @Override
-    public View createNodeView(TreeNode node) {
-        final SocialItem value = (SocialItem) node.getValue();
+    public View createNodeView(TreeNode node, SocialItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.layout_social_node, null, false);
 

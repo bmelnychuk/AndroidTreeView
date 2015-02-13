@@ -14,7 +14,7 @@ import java.util.Random;
 /**
  * Created by Bogdan Melnychuk on 2/13/15.
  */
-public class PlaceHolderHolder extends TreeNode.BaseNodeViewHolder {
+public class PlaceHolderHolder extends TreeNode.BaseNodeViewHolder<PlaceHolderHolder.PlaceItem> {
 
 
     public PlaceHolderHolder(Context context) {
@@ -22,8 +22,7 @@ public class PlaceHolderHolder extends TreeNode.BaseNodeViewHolder {
     }
 
     @Override
-    public View createNodeView(TreeNode node) {
-        final PlaceItem value = (PlaceItem) node.getValue();
+    public View createNodeView(TreeNode node, PlaceItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.layout_place_node, null, false);
 

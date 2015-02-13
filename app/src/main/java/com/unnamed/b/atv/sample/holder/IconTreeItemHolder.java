@@ -12,7 +12,7 @@ import com.unnamed.b.atv.sample.R;
 /**
  * Created by Bogdan Melnychuk on 2/12/15.
  */
-public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder {
+public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
     private TextView tvValue;
     private PrintView arrowView;
 
@@ -21,8 +21,7 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder {
     }
 
     @Override
-    public View createNodeView(TreeNode node) {
-        final IconTreeItem value = (IconTreeItem) node.getValue();
+    public View createNodeView(TreeNode node, IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.layout_icon_node, null, false);
         tvValue = (TextView) view.findViewById(R.id.node_value);
