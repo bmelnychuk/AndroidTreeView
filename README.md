@@ -37,7 +37,7 @@ Create and add your nodes (use your custom object as constructor param)
  AndroidTreeView tView = new AndroidTreeView(getActivity(), root);
  containerView.addView(tView.getView());
 ``` 
-The simplest but not styled tree is ready. Now you can see ```java parent``` node as root of your tree
+The simplest but not styled tree is ready. Now you can see ```parent``` node as root of your tree
 
 **4)** Custom view for nodes
 
