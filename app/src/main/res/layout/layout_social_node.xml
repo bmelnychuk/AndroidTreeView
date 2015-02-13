@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:minHeight="48dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_height="match_parent">
+
+
+    <com.github.johnkil.print.PrintView
+        android:layout_alignParentLeft="true"
+        android:id="@+id/arrow_icon"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iconText="@string/ic_keyboard_arrow_right"
+        app:iconColor="@android:color/white"
+        android:visibility="invisible"
+        app:iconFont="fonts/material-icon-font.ttf"
+        app:iconSize="20dp" />
+
+    <com.github.johnkil.print.PrintView
+        android:id="@+id/icon"
+        android:layout_toRightOf="@id/arrow_icon"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iconColor="@color/text_lgray"
+        app:iconFont="fonts/material-icon-font.ttf"
+        app:iconSize="24dp" />
+
+    <TextView
+        android:layout_centerVertical="true"
+        android:textSize="13sp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/text_lgray"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/profile"
+        android:layout_toLeftOf="@id/size"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/icon"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="12sp"
+            android:textColor="@color/text_lgray"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="9sp"
+            android:text="130 connections"
+            android:textColor="@color/text_lgray"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/connections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</RelativeLayout>
