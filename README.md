@@ -5,6 +5,8 @@ AndroidTreeView
 
 Tree view implementation for android
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-AndroidTreeView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1534)
+
 ### Demo
 
 [![AndroidTreeView Demo on Google Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.unnamed.b.atv.demo)
@@ -13,7 +15,7 @@ Tree view implementation for android
 ### Featrues
 + 1. N - level expandable/collapsable tree
 + 2. Custom values, views, styles for nodes
-+ 3. Save state after ration
++ 3. Save state after rotation
 
 <img width='300' hspace='20' align='left' src='https://lh4.ggpht.com/xzkb3N58LH2Tsb_gGs0u3_x81VOLwlhcp-f4pz_sR_iR3vAKXfJoAcwBjN74LvzpVLE=h900-rw' />
 
