@@ -89,3 +89,16 @@ AndroidTreeView.setDefaultNodeClickListener
 ```
 
 For more details use sample application as example
+
+### Upcoming changes
+
+**1)** Publish to maven central
+
+**2)** Horizontal scroll issue
+
+**3)** Dynamic remove/add node
+
+**4)** Add wiki?
+
+Let me know if i missed something, appreciate your support, thanks!
+
