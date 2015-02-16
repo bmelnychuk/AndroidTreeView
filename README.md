@@ -1,6 +1,11 @@
 AndroidTreeView
 ====================
 
+### Recent changes
+
+Selection mode for tree added. Use sample app as example. I did it in hurry hope didn't miss anything
+
+
 ### Description
 
 Tree view implementation for android
