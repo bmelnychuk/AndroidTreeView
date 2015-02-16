@@ -12,8 +12,10 @@ import com.unnamed.b.atv.R;
 import com.unnamed.b.atv.holder.SimpleViewHolder;
 import com.unnamed.b.atv.model.TreeNode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,6 +32,7 @@ public class AndroidTreeView {
     private int containerStyle = 0;
     private Class<? extends TreeNode.BaseNodeViewHolder> defaultViewHolderClass = SimpleViewHolder.class;
     private TreeNode.TreeNodeClickListener nodeClickListener;
+    private boolean mSelectionModeEnabled;
 
     public AndroidTreeView(Context context, TreeNode root) {
         mRoot = root;
@@ -130,6 +133,81 @@ public class AndroidTreeView {
         }
     }
 
+    public void setSelectionModeEnabled(boolean selectionModeEnabled) {
+        if (!selectionModeEnabled) {
+            // TODO fix double iteration over tree
+            deselectAll();
+        }
+        mSelectionModeEnabled = selectionModeEnabled;
+
+
+        for (TreeNode node : mRoot.getChildren()) {
+            toggleSelectionMode(node, selectionModeEnabled);
+        }
+    }
+
+    public List<TreeNode> getSelected() {
+        if (mSelectionModeEnabled) {
+            return getSelected(mRoot);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void selectNode(TreeNode node) {
+        if (mSelectionModeEnabled) {
+            node.setSelected(true);
+            toogleSelectionForNode(node, true);
+        }
+    }
+
+    public void selectAll(boolean skipCollapsed) {
+        makeAllSelection(true, skipCollapsed);
+    }
+
+    public void deselectAll() {
+        makeAllSelection(false, false);
+    }
+
+    public void makeAllSelection(boolean selected, boolean skipCollapsed) {
+        if (mSelectionModeEnabled) {
+            for (TreeNode node : mRoot.getChildren()) {
+                selectNode(node, selected, skipCollapsed);
+            }
+        }
+    }
+
+    private void selectNode(TreeNode parent, boolean selected, boolean skipCollapsed) {
+        parent.setSelected(selected);
+        toogleSelectionForNode(parent, true);
+        boolean toContinue = skipCollapsed ? parent.isExpanded() : true;
+        if (toContinue) {
+            for (TreeNode node : parent.getChildren()) {
+                selectNode(node, selected, skipCollapsed);
+            }
+        }
+    }
+
+    // TODO Do we need to go through whole tree? Save references or consider collapsed nodes as not selected
+    private List<TreeNode> getSelected(TreeNode parent) {
+        List<TreeNode> result = new ArrayList<>();
+        for (TreeNode n : parent.getChildren()) {
+            if (n.isSelected()) {
+                result.add(n);
+            }
+            result.addAll(getSelected(n));
+        }
+        return result;
+    }
+
+    private void toggleSelectionMode(TreeNode parent, boolean mSelectionModeEnabled) {
+        toogleSelectionForNode(parent, mSelectionModeEnabled);
+        for (TreeNode node : parent.getChildren()) {
+            toggleSelectionMode(node, mSelectionModeEnabled);
+        }
+    }
+
+
     private void expandNode(String[] path, TreeNode parent, int offset) {
         if (path.length >= offset) {
             final Integer nodeId = Integer.parseInt(path[path.length - offset]);
@@ -168,6 +246,9 @@ public class AndroidTreeView {
             final View nodeView = viewHolder.getView();
             nodeItemsContainer.addView(nodeView);
             toggleNode(n, n.isExpanded());
+            if (mSelectionModeEnabled) {
+                getViewHolderForNode(node).toggleSelectionMode(mSelectionModeEnabled);
+            }
 
             nodeView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -194,6 +275,10 @@ public class AndroidTreeView {
         getViewHolderForNode(node).getNodeItemsView().setVisibility(active ? View.VISIBLE : View.GONE);
         getViewHolderForNode(node).toggle(active);
         node.setExpanded(active);
+    }
+
+    private void toogleSelectionForNode(TreeNode node, boolean makeSelectable) {
+        getViewHolderForNode(node).toggleSelectionMode(makeSelectable);
     }
 
     private TreeNode.BaseNodeViewHolder getViewHolderForNode(TreeNode node) {

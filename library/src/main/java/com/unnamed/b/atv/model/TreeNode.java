@@ -20,6 +20,7 @@ public class TreeNode {
 
     private int mId;
     private TreeNode mParent;
+    private boolean mSelected;
     private final List<TreeNode> children;
     private BaseNodeViewHolder mViewHolder;
     private TreeNodeClickListener mListener;
@@ -89,6 +90,14 @@ public class TreeNode {
         return this;
     }
 
+    public void setSelected(boolean selected) {
+        mSelected = selected;
+    }
+
+    public boolean isSelected() {
+        return mSelected;
+    }
+
     public String getPath() {
         final StringBuilder path = new StringBuilder();
         TreeNode node = this;
@@ -115,8 +124,11 @@ public class TreeNode {
 
     public boolean isLastChild() {
         if (!isRoot()) {
-            final List<TreeNode> parentChildren = mParent.children;
-            return parentChildren.get(size() - 1).mId == mId;
+            int parentSize = mParent.children.size();
+            if (parentSize > 0) {
+                final List<TreeNode> parentChildren = mParent.children;
+                return parentChildren.get(parentSize - 1).mId == mId;
+            }
         }
         return false;
     }
@@ -168,7 +180,7 @@ public class TreeNode {
     }
 
     public static abstract class BaseNodeViewHolder<E> {
-        private TreeNode mNode;
+        protected TreeNode mNode;
         private View mView;
         protected int containerStyle;
         protected Context context;
@@ -208,6 +220,14 @@ public class TreeNode {
 
         public abstract View createNodeView(TreeNode node, E value);
 
-        public abstract void toggle(boolean active);
+        public void toggle(boolean active) {
+            // empty
+        }
+
+        ;
+
+        public void toggleSelectionMode(boolean editModeEnabled) {
+            // empty
+        }
     }
 }

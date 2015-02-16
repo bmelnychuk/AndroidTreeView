@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.unnamed.b.atv.sample.R;
 import com.unnamed.b.atv.sample.fragment.CustomViewHolderFragment;
 import com.unnamed.b.atv.sample.fragment.FolderStructureFragment;
+import com.unnamed.b.atv.sample.fragment.SelectableTreeFragment;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
         final LinkedHashMap<String, Class<?>> listItems = new LinkedHashMap<>();
         listItems.put("Folder Structure Example", FolderStructureFragment.class);
         listItems.put("Custom Holder Example", CustomViewHolderFragment.class);
+        listItems.put("Selectable Nodes", SelectableTreeFragment.class);
 
 
         final List<String> list = new ArrayList(listItems.keySet());

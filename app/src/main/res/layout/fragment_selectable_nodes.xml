@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/status"
+        android:background="#ff0099cc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <com.github.johnkil.print.PrintButton
+            android:id="@+id/btn_toggleSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:iconSize="28dp"
+            app:iconColor="#12558C"
+            app:iconFont="fonts/material-icon-font.ttf"
+            app:iconText="@string/ic_check_box_outline" />
+
+
+        <Button
+            android:id="@+id/btn_selectAll"
+            android:text="+ All"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_deselectAll"
+            android:text="- All"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_checkSelection"
+            android:text="Get Selection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_below="@id/status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container"></RelativeLayout>
+
+
+</RelativeLayout>
