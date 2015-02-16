@@ -21,6 +21,7 @@ Tree view implementation for android
 + 1. N - level expandable/collapsable tree
 + 2. Custom values, views, styles for nodes
 + 3. Save state after rotation
++ 4. Selection mode for nodes
 
 <img width='300' hspace='20' align='left' src='https://lh4.ggpht.com/xzkb3N58LH2Tsb_gGs0u3_x81VOLwlhcp-f4pz_sR_iR3vAKXfJoAcwBjN74LvzpVLE=h900-rw' />
 
@@ -105,3 +106,4 @@ For more details use sample application as example
 
 Let me know if i missed something, appreciate your support, thanks!
 
+If you are using this library I can post link to your project here!
