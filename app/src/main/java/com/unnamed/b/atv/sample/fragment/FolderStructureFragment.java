@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,6 +23,13 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 public class FolderStructureFragment extends Fragment {
     private TextView statusBar;
     private AndroidTreeView tView;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +68,6 @@ public class FolderStructureFragment extends Fragment {
         tView.setDefaultNodeClickListener(nodeClickListener);
 
         containerView.addView(tView.getView());
-        tView.expandNode(computerRoot);
 
         if (savedInstanceState != null) {
             String state = savedInstanceState.getString("tState");
@@ -67,7 +76,28 @@ public class FolderStructureFragment extends Fragment {
             }
         }
 
+
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.expandAll:
+                tView.expandAll();
+                break;
+
+            case R.id.collapseAll:
+                tView.collapseAll();
+                break;
+        }
+        return true;
     }
 
     private int counter = 0;

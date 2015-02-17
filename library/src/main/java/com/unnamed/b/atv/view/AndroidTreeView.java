@@ -24,8 +24,6 @@ import java.util.Set;
 public class AndroidTreeView {
     private static final String NODES_PATH_SEPARATOR = ";";
 
-    public static final int DEFAULT_CONTAINER_STYLE = R.style.TreeNodeStyle;
-
     private TreeNode mRoot;
     private Context mContext;
     private boolean applyForRoot;
@@ -56,22 +54,13 @@ public class AndroidTreeView {
         nodeClickListener = listener;
     }
 
-    public void expandLevel(int level) {
-        for (TreeNode n : mRoot.getChildren()) {
-            expandLevel(n, level);
-        }
-    }
-
-
     public void expandAll() {
-        for (TreeNode n : mRoot.getChildren()) {
-            expandAllChildren(n);
-        }
+        expandNode(mRoot, true);
     }
 
     public void collapseAll() {
         for (TreeNode n : mRoot.getChildren()) {
-            collapseAllChildren(n);
+            collapseNode(n, true);
         }
     }
 
@@ -95,12 +84,48 @@ public class AndroidTreeView {
         viewTreeItems.setOrientation(LinearLayout.VERTICAL);
         view.addView(viewTreeItems);
 
-        populateTree(mRoot, viewTreeItems);
+        mRoot.setViewHolder(new TreeNode.BaseNodeViewHolder(mContext) {
+            @Override
+            public View createNodeView(TreeNode node, Object value) {
+                return null;
+            }
+
+            @Override
+            public ViewGroup getNodeItemsView() {
+                return viewTreeItems;
+            }
+        });
+
+        expandNode(mRoot, false);
         return view;
     }
 
     public View getView() {
         return getView(-1);
+    }
+
+
+    public void expandLevel(int level) {
+        for (TreeNode n : mRoot.getChildren()) {
+            expandLevel(n, level);
+        }
+    }
+
+    private void expandLevel(TreeNode node, int level) {
+        if (node.getLevel() <= level) {
+            expandNode(node, false);
+        }
+        for (TreeNode n : node.getChildren()) {
+            expandLevel(n, level);
+        }
+    }
+
+    public void expandNode(TreeNode node) {
+        expandNode(node, false);
+    }
+
+    public void collapseNode(TreeNode node) {
+        collapseNode(node, false);
     }
 
     public String getSaveState() {
@@ -112,18 +137,6 @@ public class AndroidTreeView {
         return builder.toString();
     }
 
-    public void expandNode(TreeNode node) {
-        final String[] path = node.getPath().split(TreeNode.NODES_ID_SEPARATOR);
-        expandNode(path, mRoot, 1);
-    }
-
-    public void collapseNode(TreeNode node) {
-        if (node.isRoot()) {
-            throw new RuntimeException("Root node can't be collapsed");
-        }
-        toggleNode(node, false);
-    }
-
     public void restoreState(String saveState) {
         if (!TextUtils.isEmpty(saveState)) {
             collapseAll();
@@ -133,97 +146,10 @@ public class AndroidTreeView {
         }
     }
 
-    public void setSelectionModeEnabled(boolean selectionModeEnabled) {
-        if (!selectionModeEnabled) {
-            // TODO fix double iteration over tree
-            deselectAll();
-        }
-        mSelectionModeEnabled = selectionModeEnabled;
-
-
-        for (TreeNode node : mRoot.getChildren()) {
-            toggleSelectionMode(node, selectionModeEnabled);
-        }
-    }
-
-    public List<TreeNode> getSelected() {
-        if (mSelectionModeEnabled) {
-            return getSelected(mRoot);
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    public void selectNode(TreeNode node) {
-        if (mSelectionModeEnabled) {
-            node.setSelected(true);
-            toogleSelectionForNode(node, true);
-        }
-    }
-
-    public void selectAll(boolean skipCollapsed) {
-        makeAllSelection(true, skipCollapsed);
-    }
-
-    public void deselectAll() {
-        makeAllSelection(false, false);
-    }
-
-    public void makeAllSelection(boolean selected, boolean skipCollapsed) {
-        if (mSelectionModeEnabled) {
-            for (TreeNode node : mRoot.getChildren()) {
-                selectNode(node, selected, skipCollapsed);
-            }
-        }
-    }
-
-    private void selectNode(TreeNode parent, boolean selected, boolean skipCollapsed) {
-        parent.setSelected(selected);
-        toogleSelectionForNode(parent, true);
-        boolean toContinue = skipCollapsed ? parent.isExpanded() : true;
-        if (toContinue) {
-            for (TreeNode node : parent.getChildren()) {
-                selectNode(node, selected, skipCollapsed);
-            }
-        }
-    }
-
-    // TODO Do we need to go through whole tree? Save references or consider collapsed nodes as not selected
-    private List<TreeNode> getSelected(TreeNode parent) {
-        List<TreeNode> result = new ArrayList<>();
-        for (TreeNode n : parent.getChildren()) {
-            if (n.isSelected()) {
-                result.add(n);
-            }
-            result.addAll(getSelected(n));
-        }
-        return result;
-    }
-
-    private void toggleSelectionMode(TreeNode parent, boolean mSelectionModeEnabled) {
-        toogleSelectionForNode(parent, mSelectionModeEnabled);
-        for (TreeNode node : parent.getChildren()) {
-            toggleSelectionMode(node, mSelectionModeEnabled);
-        }
-    }
-
-
-    private void expandNode(String[] path, TreeNode parent, int offset) {
-        if (path.length >= offset) {
-            final Integer nodeId = Integer.parseInt(path[path.length - offset]);
-            for (TreeNode n : parent.getChildren()) {
-                if (n.getId() == nodeId) {
-                    toggleNode(n, true);
-                    expandNode(path, n, offset + 1);
-                }
-            }
-        }
-    }
-
     private void restoreNodeState(TreeNode node, Set<String> openNodes) {
         for (TreeNode n : node.getChildren()) {
             if (openNodes.contains(n.getPath())) {
-                toggleNode(n, true);
+                expandNode(n);
                 restoreNodeState(n, openNodes);
             }
         }
@@ -239,42 +165,138 @@ public class AndroidTreeView {
         }
     }
 
-    private void populateTree(final TreeNode node, final ViewGroup nodeItemsContainer) {
-        for (final TreeNode n : node.getChildren()) {
-            final TreeNode.BaseNodeViewHolder viewHolder = getViewHolderForNode(n);
+    private void toggleNode(TreeNode node) {
+        if (node.isExpanded()) {
+            collapseNode(node, false);
+        } else {
+            expandNode(node, false);
+        }
 
-            final View nodeView = viewHolder.getView();
-            nodeItemsContainer.addView(nodeView);
-            toggleNode(n, n.isExpanded());
-            if (mSelectionModeEnabled) {
-                getViewHolderForNode(node).toggleSelectionMode(mSelectionModeEnabled);
+    }
+
+    private void collapseNode(TreeNode node, final boolean includeSubnodes) {
+        node.setExpanded(false);
+        TreeNode.BaseNodeViewHolder nodeViewHolder = getViewHolderForNode(node);
+        nodeViewHolder.getNodeItemsView().setVisibility(View.GONE);
+        nodeViewHolder.toggle(false);
+        if (includeSubnodes) {
+            for (TreeNode n : node.getChildren()) {
+                collapseNode(n, includeSubnodes);
+            }
+        }
+    }
+
+    private void expandNode(final TreeNode node, boolean includeSubnodes) {
+        if (node.size() == 0) {
+            return;
+        }
+        node.setExpanded(true);
+        final TreeNode.BaseNodeViewHolder parentViewHolder = getViewHolderForNode(node);
+        parentViewHolder.getNodeItemsView().setVisibility(View.VISIBLE);
+        parentViewHolder.toggle(true);
+
+        for (final TreeNode n : node.getChildren()) {
+            if (!parentViewHolder.childrenInitialized()) {
+                final TreeNode.BaseNodeViewHolder viewHolder = getViewHolderForNode(n);
+                final View nodeView = viewHolder.getView();
+                parentViewHolder.getNodeItemsView().addView(nodeView);
+                if (mSelectionModeEnabled) {
+                    viewHolder.toggleSelectionMode(mSelectionModeEnabled);
+                }
+
+                nodeView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toggleNode(n);
+                        if (n.getClickListener() != null) {
+                            n.getClickListener().onClick(n, n.getValue());
+                        } else if (nodeClickListener != null) {
+                            nodeClickListener.onClick(n, n.getValue());
+                        }
+                    }
+                });
             }
 
-            nodeView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleNode(n);
-                    if (n.getClickListener() != null) {
-                        n.getClickListener().onClick(n, n.getValue());
-                    } else if (nodeClickListener != null) {
-                        nodeClickListener.onClick(n, n.getValue());
-                    }
-                }
-            });
-
-            populateTree(n, viewHolder.getNodeItemsView());
+            if (n.isExpanded() || includeSubnodes) {
+                expandNode(n, includeSubnodes);
+            }
 
         }
     }
 
-    private void toggleNode(TreeNode node) {
-        toggleNode(node, !node.isExpanded());
+
+    //------------------------------------------------------------
+    //  Selection methods
+
+    public void setSelectionModeEnabled(boolean selectionModeEnabled) {
+        if (!selectionModeEnabled) {
+            // TODO fix double iteration over tree
+            deselectAll();
+        }
+        mSelectionModeEnabled = selectionModeEnabled;
+
+        for (TreeNode node : mRoot.getChildren()) {
+            toggleSelectionMode(node, selectionModeEnabled);
+        }
+
     }
 
-    private void toggleNode(TreeNode node, boolean active) {
-        getViewHolderForNode(node).getNodeItemsView().setVisibility(active ? View.VISIBLE : View.GONE);
-        getViewHolderForNode(node).toggle(active);
-        node.setExpanded(active);
+    private void toggleSelectionMode(TreeNode parent, boolean mSelectionModeEnabled) {
+        toogleSelectionForNode(parent, mSelectionModeEnabled);
+        for (TreeNode node : parent.getChildren()) {
+            if (getViewHolderForNode(node).childrenInitialized()) {
+                toggleSelectionMode(node, mSelectionModeEnabled);
+            }
+        }
+    }
+
+    public List<TreeNode> getSelected() {
+        if (mSelectionModeEnabled) {
+            return getSelected(mRoot);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    // TODO Do we need to go through whole tree? Save references or consider collapsed nodes as not selected
+    private List<TreeNode> getSelected(TreeNode parent) {
+        List<TreeNode> result = new ArrayList<>();
+        for (TreeNode n : parent.getChildren()) {
+            if (n.isSelected()) {
+                result.add(n);
+            }
+            result.addAll(getSelected(n));
+        }
+        return result;
+    }
+
+    public void selectAll(boolean skipCollapsed) {
+        makeAllSelection(true, skipCollapsed);
+    }
+
+    public void deselectAll() {
+        makeAllSelection(false, false);
+    }
+
+    private void makeAllSelection(boolean selected, boolean skipCollapsed) {
+        if (mSelectionModeEnabled) {
+            for (TreeNode node : mRoot.getChildren()) {
+                selectNode(node, selected, skipCollapsed);
+            }
+        }
+    }
+
+    private void selectNode(TreeNode parent, boolean selected, boolean skipCollapsed) {
+        parent.setSelected(selected);
+        toogleSelectionForNode(parent, true);
+        boolean toContinue = skipCollapsed ? parent.isExpanded() : true;
+        if (toContinue) {
+            for (TreeNode node : parent.getChildren()) {
+                if (getViewHolderForNode(node).childrenInitialized()) {
+                    selectNode(node, selected, skipCollapsed);
+                }
+            }
+        }
     }
 
     private void toogleSelectionForNode(TreeNode node, boolean makeSelectable) {
@@ -297,32 +319,4 @@ public class AndroidTreeView {
         }
         return viewHolder;
     }
-
-    private void collapseAllChildren(TreeNode node) {
-        if (node.isExpanded()) {
-            toggleNode(node);
-        }
-        for (TreeNode n : node.getChildren()) {
-            collapseAllChildren(n);
-        }
-    }
-
-    private void expandLevel(TreeNode node, int level) {
-        if (node.getLevel() <= level) {
-            toggleNode(node, true);
-        }
-        for (TreeNode n : node.getChildren()) {
-            expandLevel(n, level);
-        }
-    }
-
-    private void expandAllChildren(TreeNode node) {
-        if (!node.isExpanded()) {
-            toggleNode(node);
-        }
-        for (TreeNode n : node.getChildren()) {
-            expandAllChildren(n);
-        }
-    }
-
 }

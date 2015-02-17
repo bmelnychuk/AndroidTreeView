@@ -32,7 +32,7 @@ public class TreeNode {
     }
 
     public TreeNode(Object value) {
-        children = new ArrayList<TreeNode>();
+        children = new ArrayList<>();
         mValue = value;
     }
 
@@ -211,6 +211,10 @@ public class TreeNode {
 
         public ViewGroup getNodeItemsView() {
             return (ViewGroup) getView().findViewById(R.id.node_items);
+        }
+
+        public boolean childrenInitialized() {
+            return getNodeItemsView().getChildCount() == mNode.size();
         }
 
         public int getContainerStyle() {
