@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.unnamed.b.atv.R;
+import com.unnamed.b.atv.view.AndroidTreeView;
 import com.unnamed.b.atv.view.TreeNodeWrapperView;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class TreeNode {
     private int mId;
     private TreeNode mParent;
     private boolean mSelected;
+    private boolean mSelectable = true;
     private final List<TreeNode> children;
     private BaseNodeViewHolder mViewHolder;
     private TreeNodeClickListener mListener;
@@ -28,7 +30,9 @@ public class TreeNode {
     private boolean mExpanded;
 
     public static TreeNode root() {
-        return new TreeNode(null);
+        TreeNode root = new TreeNode(null);
+        root.setSelectable(false);
+        return root;
     }
 
     public TreeNode(Object value) {
@@ -38,6 +42,7 @@ public class TreeNode {
 
     public TreeNode addChild(TreeNode childNode) {
         childNode.mParent = this;
+        //TODO think about id generation
         childNode.mId = size();
         children.add(childNode);
         return this;
@@ -55,6 +60,16 @@ public class TreeNode {
             addChild(n);
         }
         return this;
+    }
+
+    public int deleteChild(TreeNode child) {
+        for (int i = 0; i < children.size(); i++) {
+            if (child.mId == children.get(i).mId) {
+                children.remove(i);
+                return i;
+            }
+        }
+        return -1;
     }
 
     public List<TreeNode> getChildren() {
@@ -95,7 +110,19 @@ public class TreeNode {
     }
 
     public boolean isSelected() {
-        return mSelected;
+        if (mSelectable) {
+            return mSelected;
+        } else {
+            return false;
+        }
+    }
+
+    public void setSelectable(boolean selectable) {
+        mSelectable = selectable;
+    }
+
+    public boolean isSelectable() {
+        return mSelectable;
     }
 
     public String getPath() {
@@ -180,6 +207,7 @@ public class TreeNode {
     }
 
     public static abstract class BaseNodeViewHolder<E> {
+        protected AndroidTreeView tView;
         protected TreeNode mNode;
         private View mView;
         protected int containerStyle;
@@ -201,6 +229,14 @@ public class TreeNode {
             return mView;
         }
 
+        public void setTreeViev(AndroidTreeView treeViev) {
+            this.tView = treeViev;
+        }
+
+        public AndroidTreeView getTreeView() {
+            return tView;
+        }
+
         public void setContainerStyle(int style) {
             containerStyle = style;
         }
@@ -213,8 +249,8 @@ public class TreeNode {
             return (ViewGroup) getView().findViewById(R.id.node_items);
         }
 
-        public boolean childrenInitialized() {
-            return getNodeItemsView().getChildCount() == mNode.size();
+        public boolean isInitialized() {
+            return mView != null;
         }
 
         public int getContainerStyle() {
@@ -227,8 +263,6 @@ public class TreeNode {
         public void toggle(boolean active) {
             // empty
         }
-
-        ;
 
         public void toggleSelectionMode(boolean editModeEnabled) {
             // empty

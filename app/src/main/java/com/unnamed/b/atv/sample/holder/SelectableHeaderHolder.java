@@ -44,6 +44,9 @@ public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTree
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 node.setSelected(isChecked);
+                for (TreeNode n : node.getChildren()) {
+                    getTreeView().selectNode(n, isChecked);
+                }
             }
         });
         nodeSelector.setChecked(node.isSelected());

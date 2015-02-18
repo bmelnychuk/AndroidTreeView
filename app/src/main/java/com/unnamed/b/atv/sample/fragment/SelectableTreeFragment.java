@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.sample.R;
 import com.unnamed.b.atv.sample.holder.IconTreeItemHolder;
+import com.unnamed.b.atv.sample.holder.ProfileHolder;
 import com.unnamed.b.atv.sample.holder.SelectableHeaderHolder;
 import com.unnamed.b.atv.sample.holder.SelectableItemHolder;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -73,6 +74,11 @@ public class SelectableTreeFragment extends Fragment {
 
         TreeNode root = TreeNode.root();
 
+        TreeNode s1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_sd_storage, "Storage1")).setViewHolder(new ProfileHolder(getActivity()));
+        TreeNode s2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_sd_storage, "Storage2")).setViewHolder(new ProfileHolder(getActivity()));
+        s1.setSelectable(false);
+        s2.setSelectable(false);
+
         TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Folder 1")).setViewHolder(new SelectableHeaderHolder(getActivity()));
         TreeNode folder2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Folder 2")).setViewHolder(new SelectableHeaderHolder(getActivity()));
         TreeNode folder3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Folder 3")).setViewHolder(new SelectableHeaderHolder(getActivity()));
@@ -81,8 +87,10 @@ public class SelectableTreeFragment extends Fragment {
         fillFolder(folder2);
         fillFolder(folder3);
 
+        s1.addChildren(folder1, folder2);
+        s2.addChildren(folder3);
 
-        root.addChildren(folder1, folder2, folder3);
+        root.addChildren(s1, s2);
 
         tView = new AndroidTreeView(getActivity(), root);
         containerView.addView(tView.getView());
