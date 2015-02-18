@@ -3,7 +3,7 @@ AndroidTreeView
 
 ### Recent changes
 
-Selection mode for tree added. Use sample app as example. I did it in hurry hope didn't miss anything
+Dynamic add/remove nodes. Added to maven central
 
 
 ### Description
@@ -22,6 +22,7 @@ Tree view implementation for android
 + 2. Custom values, views, styles for nodes
 + 3. Save state after rotation
 + 4. Selection mode for nodes
++ 5. Dynamic add/remove node
 
 <img width='300' hspace='20' align='left' src='https://lh4.ggpht.com/xzkb3N58LH2Tsb_gGs0u3_x81VOLwlhcp-f4pz_sR_iR3vAKXfJoAcwBjN74LvzpVLE=h900-rw' />
 
@@ -32,7 +33,9 @@ Tree view implementation for android
 
 ### Integration
 
-**1)** Add library as a dependency to your project
+**1)** Add library as a dependency to your project 
+
+```compile 'com.github.bmelnychuk:atv:1.2.0'```
 
 **2)** Create your tree starting from root element. ```TreeNode.root()``` element will not be displayed so it doesn't require anything to be set.
 ```java
