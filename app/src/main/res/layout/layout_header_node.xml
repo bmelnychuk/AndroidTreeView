@@ -36,7 +36,6 @@
         android:textColor="@color/text_gray"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/icon"
-        android:layout_toLeftOf="@+id/total"
         android:id="@+id/node_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

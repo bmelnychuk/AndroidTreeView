@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:iconColor="@android:color/holo_blue_dark"
+        app:iconColor="#0099cc"
         app:iconFont="fonts/material-icon-font.ttf"
         app:iconSize="36dp" />
 
@@ -24,7 +24,6 @@
         android:textColor="@color/text_gray"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/icon"
-        android:layout_toLeftOf="@+id/total"
         android:id="@+id/node_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
