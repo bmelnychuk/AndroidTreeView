@@ -3,7 +3,7 @@ AndroidTreeView
 
 ### Recent changes
 
-Dynamic add/remove nodes. Added to maven central
+Colapse/expand animation added
 
 
 ### Description
