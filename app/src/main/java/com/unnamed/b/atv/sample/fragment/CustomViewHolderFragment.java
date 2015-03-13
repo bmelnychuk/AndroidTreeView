@@ -41,6 +41,7 @@ public class CustomViewHolderFragment extends Fragment {
         root.addChildren(myProfile, bruce, barry, clark);
 
         tView = new AndroidTreeView(getActivity(), root);
+        tView.setDefaultAnimation(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleDivided, true);
         containerView.addView(tView.getView());
 

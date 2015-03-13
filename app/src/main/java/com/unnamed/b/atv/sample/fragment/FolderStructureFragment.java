@@ -63,6 +63,7 @@ public class FolderStructureFragment extends Fragment {
         root.addChildren(computerRoot);
 
         tView = new AndroidTreeView(getActivity(), root);
+        tView.setDefaultAnimation(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
         tView.setDefaultViewHolder(IconTreeItemHolder.class);
         tView.setDefaultNodeClickListener(nodeClickListener);
