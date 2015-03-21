@@ -129,7 +129,7 @@ public class TreeNode {
         final StringBuilder path = new StringBuilder();
         TreeNode node = this;
         while (node.mParent != null) {
-            path.append(mId);
+            path.append(node.getId());
             node = node.mParent;
             if (node.mParent != null) {
                 path.append(NODES_ID_SEPARATOR);
