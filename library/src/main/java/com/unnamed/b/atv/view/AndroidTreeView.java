@@ -85,7 +85,7 @@ public class AndroidTreeView {
         if (containerStyle != 0 && applyForRoot) {
             containerContext = new ContextThemeWrapper(mContext, containerStyle);
         }
-        final LinearLayout viewTreeItems = new LinearLayout(containerContext);
+        final LinearLayout viewTreeItems = new LinearLayout(containerContext, null, containerStyle);
 
         viewTreeItems.setId(R.id.tree_items);
         viewTreeItems.setOrientation(LinearLayout.VERTICAL);
@@ -185,7 +185,7 @@ public class AndroidTreeView {
         node.setExpanded(false);
         TreeNode.BaseNodeViewHolder nodeViewHolder = getViewHolderForNode(node);
 
-        if(mUseDefaultAnimation) {
+        if (mUseDefaultAnimation) {
             collapse(nodeViewHolder.getNodeItemsView());
         } else {
             nodeViewHolder.getNodeItemsView().setVisibility(View.GONE);
@@ -214,7 +214,7 @@ public class AndroidTreeView {
             }
 
         }
-        if(mUseDefaultAnimation) {
+        if (mUseDefaultAnimation) {
             expand(parentViewHolder.getNodeItemsView());
         } else {
             parentViewHolder.getNodeItemsView().setVisibility(View.VISIBLE);
@@ -372,13 +372,12 @@ public class AndroidTreeView {
 
         v.getLayoutParams().height = 0;
         v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
                         ? LinearLayout.LayoutParams.WRAP_CONTENT
-                        : (int)(targetHeight * interpolatedTime);
+                        : (int) (targetHeight * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -389,21 +388,20 @@ public class AndroidTreeView {
         };
 
         // 1dp/ms
-        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
     private static void collapse(final View v) {
         final int initialHeight = v.getMeasuredHeight();
 
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
+                if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.requestLayout();
                 }
             }
@@ -415,7 +413,7 @@ public class AndroidTreeView {
         };
 
         // 1dp/ms
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
