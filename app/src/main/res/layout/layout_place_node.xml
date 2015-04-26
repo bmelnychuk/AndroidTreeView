@@ -5,6 +5,7 @@
     android:minHeight="48dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_height="match_parent">
 
 
