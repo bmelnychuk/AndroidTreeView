@@ -105,4 +105,6 @@ For more details use sample application as example
 
 Let me know if i missed something, appreciate your support, thanks!
 
-If you are using this library I can post link to your project here!
+### Projects using this library
+
+[Blue Dot : World Chat](https://play.google.com/store/apps/details?id=com.commandapps.bluedot)
