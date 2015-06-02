@@ -34,6 +34,7 @@ public class AndroidTreeView {
     private TreeNode.TreeNodeClickListener nodeClickListener;
     private boolean mSelectionModeEnabled;
     private boolean mUseDefaultAnimation = false;
+    private boolean use2dScroll = false;
 
     public AndroidTreeView(Context context, TreeNode root) {
         mRoot = root;
@@ -51,6 +52,14 @@ public class AndroidTreeView {
     public void setDefaultContainerStyle(int style, boolean applyForRoot) {
         containerStyle = style;
         this.applyForRoot = applyForRoot;
+    }
+
+    public void setUse2dScroll(boolean use2dScroll) {
+        this.use2dScroll = use2dScroll;
+    }
+
+    public boolean is2dScrollEnabled() {
+        return use2dScroll;
     }
 
     public void setDefaultViewHolder(Class<? extends TreeNode.BaseNodeViewHolder> viewHolder) {
@@ -73,12 +82,12 @@ public class AndroidTreeView {
 
 
     public View getView(int style) {
-        final ScrollView view;
+        final ViewGroup view;
         if (style > 0) {
             ContextThemeWrapper newContext = new ContextThemeWrapper(mContext, style);
-            view = new ScrollView(newContext);
+            view = use2dScroll ? new TwoDScrollView(newContext) : new ScrollView(newContext);
         } else {
-            view = new ScrollView(mContext);
+            view = use2dScroll ? new TwoDScrollView(mContext) : new ScrollView(mContext);
         }
 
         Context containerContext = mContext;
