@@ -260,11 +260,9 @@ public class AndroidTreeView {
             @Override
             public boolean onLongClick(View view) {
                 if (n.getLongClickListener() != null) {
-                    n.getLongClickListener().onLongClick(n, n.getValue());
-                    return true;
+                    return n.getLongClickListener().onLongClick(n, n.getValue());
                 } else if (nodeLongClickListener != null) {
-                    nodeLongClickListener.onLongClick(n, n.getValue());
-                    return true;
+                    return nodeLongClickListener.onLongClick(n, n.getValue());
                 }
                 return false;
             }
