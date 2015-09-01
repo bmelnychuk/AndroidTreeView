@@ -32,6 +32,7 @@ public class AndroidTreeView {
     private int containerStyle = 0;
     private Class<? extends TreeNode.BaseNodeViewHolder> defaultViewHolderClass = SimpleViewHolder.class;
     private TreeNode.TreeNodeClickListener nodeClickListener;
+    private TreeNode.TreeNodeLongClickListener nodeLongClickListener;
     private boolean mSelectionModeEnabled;
     private boolean mUseDefaultAnimation = false;
     private boolean use2dScroll = false;
@@ -68,6 +69,10 @@ public class AndroidTreeView {
 
     public void setDefaultNodeClickListener(TreeNode.TreeNodeClickListener listener) {
         nodeClickListener = listener;
+    }
+
+    public void setDefaultNodeLongClickListener(TreeNode.TreeNodeLongClickListener listener) {
+        nodeLongClickListener = listener;
     }
 
     public void expandAll() {
@@ -248,6 +253,20 @@ public class AndroidTreeView {
                     nodeClickListener.onClick(n, n.getValue());
                 }
                 toggleNode(n);
+            }
+        });
+
+        nodeView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (n.getLongClickListener() != null) {
+                    n.getLongClickListener().onLongClick(n, n.getValue());
+                    return true;
+                } else if (nodeLongClickListener != null) {
+                    nodeLongClickListener.onLongClick(n, n.getValue());
+                    return true;
+                }
+                return false;
             }
         });
     }

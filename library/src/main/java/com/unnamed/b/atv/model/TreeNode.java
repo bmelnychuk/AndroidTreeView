@@ -25,7 +25,8 @@ public class TreeNode {
     private boolean mSelectable = true;
     private final List<TreeNode> children;
     private BaseNodeViewHolder mViewHolder;
-    private TreeNodeClickListener mListener;
+    private TreeNodeClickListener mClickListener;
+    private TreeNodeLongClickListener mLongClickListener;
     private Object mValue;
     private boolean mExpanded;
 
@@ -169,13 +170,21 @@ public class TreeNode {
     }
 
     public TreeNode setClickListener(TreeNodeClickListener listener) {
-        mListener = listener;
+        mClickListener = listener;
         return this;
     }
 
-
     public TreeNodeClickListener getClickListener() {
-        return this.mListener;
+        return this.mClickListener;
+    }
+
+    public TreeNode setLongClickListener(TreeNodeLongClickListener listener) {
+        mLongClickListener = listener;
+        return this;
+    }
+
+    public TreeNodeLongClickListener getLongClickListener() {
+        return mLongClickListener;
     }
 
     public BaseNodeViewHolder getViewHolder() {
@@ -204,6 +213,10 @@ public class TreeNode {
 
     public interface TreeNodeClickListener {
         void onClick(TreeNode node, Object value);
+    }
+
+    public interface TreeNodeLongClickListener {
+        void onLongClick(TreeNode node, Object value);
     }
 
     public static abstract class BaseNodeViewHolder<E> {
