@@ -216,7 +216,7 @@ public class TreeNode {
     }
 
     public interface TreeNodeLongClickListener {
-        void onLongClick(TreeNode node, Object value);
+        boolean onLongClick(TreeNode node, Object value);
     }
 
     public static abstract class BaseNodeViewHolder<E> {
