@@ -67,6 +67,7 @@ public class FolderStructureFragment extends Fragment {
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
         tView.setDefaultViewHolder(IconTreeItemHolder.class);
         tView.setDefaultNodeClickListener(nodeClickListener);
+        tView.setDefaultNodeLongClickListener(nodeLongClickListener);
 
         containerView.addView(tView.getView());
 
@@ -116,6 +117,14 @@ public class FolderStructureFragment extends Fragment {
         public void onClick(TreeNode node, Object value) {
             IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
             statusBar.setText("Last clicked: " + item.text);
+        }
+    };
+
+    private TreeNode.TreeNodeLongClickListener nodeLongClickListener = new TreeNode.TreeNodeLongClickListener() {
+        @Override
+        public void onLongClick(TreeNode node, Object value) {
+            IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
+            Toast.makeText(getActivity(), "Long click: " + item.text, Toast.LENGTH_SHORT).show();
         }
     };
 
