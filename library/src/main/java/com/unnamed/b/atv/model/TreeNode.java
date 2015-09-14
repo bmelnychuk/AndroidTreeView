@@ -115,11 +115,7 @@ public class TreeNode {
     }
 
     public boolean isSelected() {
-        if (mSelectable) {
-            return mSelected;
-        } else {
-            return false;
-        }
+        return mSelectable && mSelected;
     }
 
     public void setSelectable(boolean selectable) {
