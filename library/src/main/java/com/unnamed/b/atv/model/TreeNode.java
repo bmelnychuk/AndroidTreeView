@@ -20,6 +20,7 @@ public class TreeNode {
     public static final String NODES_ID_SEPARATOR = ":";
 
     private int mId;
+    private int mLastId;
     private TreeNode mParent;
     private boolean mSelected;
     private boolean mSelectable = true;
@@ -36,6 +37,10 @@ public class TreeNode {
         return root;
     }
 
+    private int generateId() {
+        return ++mLastId;
+    }
+
     public TreeNode(Object value) {
         children = new ArrayList<>();
         mValue = value;
@@ -43,8 +48,7 @@ public class TreeNode {
 
     public TreeNode addChild(TreeNode childNode) {
         childNode.mParent = this;
-        //TODO think about id generation
-        childNode.mId = size();
+        childNode.mId = generateId();
         children.add(childNode);
         return this;
     }
@@ -111,11 +115,7 @@ public class TreeNode {
     }
 
     public boolean isSelected() {
-        if (mSelectable) {
-            return mSelected;
-        } else {
-            return false;
-        }
+        return mSelectable && mSelected;
     }
 
     public void setSelectable(boolean selectable) {

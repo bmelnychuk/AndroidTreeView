@@ -269,7 +269,6 @@ public class AndroidTreeView {
         });
     }
 
-
     //------------------------------------------------------------
     //  Selection methods
 
@@ -376,7 +375,7 @@ public class AndroidTreeView {
         TreeNode.BaseNodeViewHolder viewHolder = node.getViewHolder();
         if (viewHolder == null) {
             try {
-                final Object object = defaultViewHolderClass.getConstructor(Context.class).newInstance(new Object[]{mContext});
+                final Object object = defaultViewHolderClass.getConstructor(Context.class).newInstance(mContext);
                 viewHolder = (TreeNode.BaseNodeViewHolder) object;
                 node.setViewHolder(viewHolder);
             } catch (Exception e) {

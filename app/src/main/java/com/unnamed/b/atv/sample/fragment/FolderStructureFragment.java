@@ -78,7 +78,6 @@ public class FolderStructureFragment extends Fragment {
             }
         }
 
-
         return rootView;
     }
 
@@ -122,9 +121,10 @@ public class FolderStructureFragment extends Fragment {
 
     private TreeNode.TreeNodeLongClickListener nodeLongClickListener = new TreeNode.TreeNodeLongClickListener() {
         @Override
-        public void onLongClick(TreeNode node, Object value) {
+        public boolean onLongClick(TreeNode node, Object value) {
             IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
             Toast.makeText(getActivity(), "Long click: " + item.text, Toast.LENGTH_SHORT).show();
+            return true;
         }
     };
 
