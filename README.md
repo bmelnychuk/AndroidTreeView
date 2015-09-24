@@ -25,6 +25,12 @@ Tree view implementation for android
 + 4. Selection mode for nodes
 + 5. Dynamic add/remove node
 
+### Known Limitations
++ For Android 4.0 (+/- nearest version) if you have too deep view hierarchy and with tree its easily possible, your app may crash
+
+<br>
+<br>
+
 <img width='300' hspace='20' align='left' src='https://lh4.ggpht.com/xzkb3N58LH2Tsb_gGs0u3_x81VOLwlhcp-f4pz_sR_iR3vAKXfJoAcwBjN74LvzpVLE=h900-rw' />
 
 <img width='300' hspace='20' src='https://lh5.ggpht.com/Ut6By_iUnkNfzIbaPBsc8hBeQeFj_2UXJh_1tfwDdlTAqGkhiR72A_AwQ0L0GH3OFag=h900-rw' />
