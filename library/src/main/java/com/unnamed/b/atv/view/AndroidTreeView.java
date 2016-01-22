@@ -26,7 +26,7 @@ import java.util.Set;
 public class AndroidTreeView {
     private static final String NODES_PATH_SEPARATOR = ";";
 
-    private TreeNode mRoot;
+    protected TreeNode mRoot;
     private Context mContext;
     private boolean applyForRoot;
     private int containerStyle = 0;
@@ -36,6 +36,14 @@ public class AndroidTreeView {
     private boolean mSelectionModeEnabled;
     private boolean mUseDefaultAnimation = false;
     private boolean use2dScroll = false;
+
+    public AndroidTreeView(Context context) {
+        mContext = context;
+    }
+
+    public void setRoot(TreeNode mRoot) {
+        this.mRoot = mRoot;
+    }
 
     public AndroidTreeView(Context context, TreeNode root) {
         mRoot = root;
