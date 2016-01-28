@@ -39,6 +39,7 @@ public class TwoDScrollingFragment extends Fragment {
         tView = new AndroidTreeView(getActivity(), root);
         tView.setDefaultAnimation(true);
         tView.setUse2dScroll(true);
+        tView.setFullWidth(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
         containerView.addView(tView.getView());
 
