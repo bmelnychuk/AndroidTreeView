@@ -280,5 +280,9 @@ public class TreeNode {
         public void toggleSelectionMode(boolean editModeEnabled) {
             // empty
         }
+
+        public void recycleView() {
+            mView = null;
+        }
     }
 }

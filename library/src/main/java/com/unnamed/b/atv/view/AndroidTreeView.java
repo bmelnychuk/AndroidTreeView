@@ -224,6 +224,7 @@ public class AndroidTreeView {
     private void collapseNode(TreeNode node, final boolean includeSubnodes) {
         node.setExpanded(false);
         TreeNode.BaseNodeViewHolder nodeViewHolder = getViewHolderForNode(node);
+        nodeViewHolder.getNodeItemsView().removeAllViews();
 
         if (mUseDefaultAnimation) {
             collapse(nodeViewHolder.getNodeItemsView());
@@ -234,6 +235,8 @@ public class AndroidTreeView {
         if (includeSubnodes) {
             for (TreeNode n : node.getChildren()) {
                 collapseNode(n, includeSubnodes);
+                TreeNode.BaseNodeViewHolder childViewHolder = getViewHolderForNode(n);
+                childViewHolder.recycleView();
             }
         }
     }
