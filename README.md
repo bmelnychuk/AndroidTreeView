@@ -105,12 +105,6 @@ AndroidTreeView.setDefaultNodeClickListener
 
 For more details use sample application as example
 
-### Upcoming changes
-
-**1)** Horizontal scroll issue
-
-**2)** Add wiki?
-
 Let me know if i missed something, appreciate your support, thanks!
 
 ### Projects using this library
