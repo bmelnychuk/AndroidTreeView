@@ -15,7 +15,7 @@ Tree view implementation for android
 
 ### Demo
 
-[![AndroidTreeView Demo on Google Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.unnamed.b.atv.demo)
+[![AndroidTreeView Demo on Google Play Store](http://style.anu.edu.au/_anu/images/icons/icon-google-play-small.png)](https://play.google.com/store/apps/details?id=com.unnamed.b.atv.demo)
 
 
 ### Features
