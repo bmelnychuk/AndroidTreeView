@@ -87,6 +87,8 @@ public class TwoDScrollView extends FrameLayout {
     private int mTouchSlop;
     private int mMinimumVelocity;
     private int mMaximumVelocity;
+    private boolean mFillViewportWidth;
+
 
     public TwoDScrollView(Context context) {
         super(context);
@@ -352,6 +354,35 @@ public class TwoDScrollView extends FrameLayout {
    * drag mode.
    */
         return mIsBeingDragged;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        if (!mFillViewportWidth) {
+            return;
+        }
+
+        final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        if (widthMode == MeasureSpec.UNSPECIFIED) {
+            return;
+        }
+
+        if (getChildCount() > 0) {
+            final View child = getChildAt(0);
+            int width = getMeasuredWidth();
+
+            if (child.getMeasuredWidth() < width) {
+                width -= getPaddingLeft();
+                width -= getPaddingRight();
+                int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+
+                child.measure(childWidthMeasureSpec, MeasureSpec.UNSPECIFIED);
+            }
+
+        }
+
     }
 
     @Override
@@ -1106,5 +1137,31 @@ public class TwoDScrollView extends FrameLayout {
             return child - my;
         }
         return n;
+    }
+
+
+    /**
+     * Indicates this TwoDScrollView whether it should stretch its content width
+     * to fill the viewport or not.
+     *
+     * @param fillViewportWidth True to stretch the content's width to the viewport's
+     *                          boundaries, false otherwise.
+     */
+
+    public void setFillViewportWidth(boolean fillViewportWidth) {
+        if (mFillViewportWidth != fillViewportWidth) {
+            mFillViewportWidth = fillViewportWidth;
+            requestLayout();
+        }
+    }
+
+    /**
+     * Indicates whether this TwoDScrollView's width is stretched to
+     * fill the viewport.
+     *
+     * @return True if the width fills the viewport, false otherwise.
+     */
+    public boolean isFillViewportWidth() {
+        return mFillViewportWidth;
     }
 }

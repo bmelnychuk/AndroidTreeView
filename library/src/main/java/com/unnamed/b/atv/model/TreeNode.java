@@ -211,6 +211,10 @@ public class TreeNode {
         return root;
     }
 
+    public void deleteChildren() {
+        children.clear();
+    }
+
     public interface TreeNodeClickListener {
         void onClick(TreeNode node, Object value);
     }
@@ -279,6 +283,10 @@ public class TreeNode {
 
         public void toggleSelectionMode(boolean editModeEnabled) {
             // empty
+        }
+
+        public void recycleView() {
+            mView = null;
         }
     }
 }

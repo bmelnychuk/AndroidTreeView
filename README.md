@@ -3,9 +3,7 @@ AndroidTreeView
 
 ### Recent changes
 
-
-2D scrolling mode added, keep in mind this comes with few limitations: you won't be able not place views on right side like alignParentRight. Everything should be align left. Is not enabled by default
-
+This repo has Diverged from the original one. Haven't setup maven dependency yet. Anyone who is interested can help.
 
 ### Description
 
@@ -104,14 +102,6 @@ AndroidTreeView.setDefaultNodeClickListener
 ```
 
 For more details use sample application as example
-
-### Upcoming changes
-
-**1)** Horizontal scroll issue
-
-**2)** Add wiki?
-
-Let me know if i missed something, appreciate your support, thanks!
 
 ### Projects using this library
 
