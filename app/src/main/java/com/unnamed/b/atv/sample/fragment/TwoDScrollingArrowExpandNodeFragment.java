@@ -17,7 +17,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 /**
  * Created by Bogdan Melnychuk on 2/12/15 modified by Szigeti Peter 2/2/16.
  */
-public class TwoDScrollingArrowExpandFragment extends Fragment implements TreeNode.TreeNodeClickListener{
+public class TwoDScrollingArrowExpandNodeFragment extends Fragment implements TreeNode.TreeNodeClickListener{
     private static final String NAME = "Very long name for folder";
     private AndroidTreeView tView;
 
@@ -35,7 +35,7 @@ public class TwoDScrollingArrowExpandFragment extends Fragment implements TreeNo
             new ArrowExpandSelectableHeaderHolder(getActivity()));
 
         fillFolder(s1);
-        fillFolder(s2);
+        TreeNode nodeToExpand = fillFolder(s2);
 
         root.addChildren(s1, s2);
 
@@ -43,12 +43,16 @@ public class TwoDScrollingArrowExpandFragment extends Fragment implements TreeNo
         tView.setDefaultAnimation(true);
         tView.setUse2dScroll(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-        tView.setDefaultNodeClickListener(TwoDScrollingArrowExpandFragment.this);
+        tView.setDefaultNodeClickListener(TwoDScrollingArrowExpandNodeFragment.this);
         tView.setDefaultViewHolder(ArrowExpandSelectableHeaderHolder.class);
         containerView.addView(tView.getView());
-        tView.setExpansionAutoToggle(false);
 
-        tView.expandAll();
+        tView.setAutoScrollToExpandedNode(true);
+        tView.setAutoScrollToSelectedLeafs(true);
+        tView.setLeafSelectionAutoToggle(true);
+
+        tView.expandNode(s1);
+        tView.expandNodeIncludingParents(nodeToExpand, true);
 
         if (savedInstanceState != null) {
             String state = savedInstanceState.getString("tState");
@@ -59,13 +63,15 @@ public class TwoDScrollingArrowExpandFragment extends Fragment implements TreeNo
         return rootView;
     }
 
-    private void fillFolder(TreeNode folder) {
+    private TreeNode fillFolder(TreeNode folder) {
         TreeNode currentNode = folder;
-        for (int i = 0; i < 4; i++) {
-            TreeNode file = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, NAME + " " + i));
+        TreeNode file = null;
+        for (int i = 0; i < 6; i++) {
+            file = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, NAME + " " + i));
             currentNode.addChild(file);
             currentNode = file;
         }
+        return file;
     }
 
     @Override

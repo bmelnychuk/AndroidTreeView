@@ -14,6 +14,7 @@ import com.unnamed.b.atv.sample.fragment.CustomViewHolderFragment;
 import com.unnamed.b.atv.sample.fragment.FolderStructureFragment;
 import com.unnamed.b.atv.sample.fragment.SelectableTreeFragment;
 import com.unnamed.b.atv.sample.fragment.TwoDScrollingArrowExpandFragment;
+import com.unnamed.b.atv.sample.fragment.TwoDScrollingArrowExpandNodeFragment;
 import com.unnamed.b.atv.sample.fragment.TwoDScrollingFragment;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
         listItems.put("Selectable Nodes", SelectableTreeFragment.class);
         listItems.put("2d scrolling", TwoDScrollingFragment.class);
         listItems.put("Expand with arrow only", TwoDScrollingArrowExpandFragment.class);
+        listItems.put("Expand with arrow one node only", TwoDScrollingArrowExpandNodeFragment.class);
 
 
         final List<String> list = new ArrayList(listItems.keySet());

@@ -42,7 +42,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         arrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tView.toggleNode(node);
+                tView.toggleNodeExpansion(node);
             }
         });
 

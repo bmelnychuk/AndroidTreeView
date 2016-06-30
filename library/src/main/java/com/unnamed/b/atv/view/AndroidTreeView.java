@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
@@ -26,8 +27,8 @@ import java.util.Set;
 public class AndroidTreeView {
     private static final String NODES_PATH_SEPARATOR = ";";
 
-    protected TreeNode mRoot;
-    private Context mContext;
+    protected Context mContext;
+    private TreeNode mRoot;
     private boolean applyForRoot;
     private int containerStyle = 0;
     private Class<? extends TreeNode.BaseNodeViewHolder> defaultViewHolderClass = SimpleViewHolder.class;
@@ -36,7 +37,12 @@ public class AndroidTreeView {
     private boolean mSelectionModeEnabled;
     private boolean mUseDefaultAnimation = false;
     private boolean use2dScroll = false;
-    private boolean enableAutoToggle = true;
+    private boolean enableExpansionAutoToggle = true;
+    private boolean enableSelectionsAutoToggle = true;
+    private ViewGroup mRootView;
+    private TreeNode currentSelectedLeaf;
+    private boolean autoScrollToExpandedNode = true;
+    private boolean autoScrollToSelectedLeafs = false;
 
     public AndroidTreeView(Context context) {
         mContext = context;
@@ -49,6 +55,14 @@ public class AndroidTreeView {
     public AndroidTreeView(Context context, TreeNode root) {
         mRoot = root;
         mContext = context;
+    }
+
+    public void setAutoScrollToSelectedLeafs(boolean autoScrollToSelectedLeafs) {
+        this.autoScrollToSelectedLeafs = autoScrollToSelectedLeafs;
+    }
+
+    public void setAutoScrollToExpandedNode(boolean autoScrollToExpandedNode) {
+        this.autoScrollToExpandedNode = autoScrollToExpandedNode;
     }
 
     public void setDefaultAnimation(boolean defaultAnimation) {
@@ -72,12 +86,16 @@ public class AndroidTreeView {
         return use2dScroll;
     }
 
-    public void setUseAutoToggle(boolean enableAutoToggle) {
-        this.enableAutoToggle = enableAutoToggle;
+    public void setExpansionAutoToggle(boolean enableAutoToggle) {
+        this.enableExpansionAutoToggle = enableAutoToggle;
     }
 
-    public boolean isAutoToggleEnabled() {
-        return enableAutoToggle;
+    public boolean isExpansionAutoToggleEnabled() {
+        return enableExpansionAutoToggle;
+    }
+
+    public void setLeafSelectionAutoToggle(boolean enableSelectionsAutoToggle) {
+        this.enableSelectionsAutoToggle = enableSelectionsAutoToggle;
     }
 
     public void setDefaultViewHolder(Class<? extends TreeNode.BaseNodeViewHolder> viewHolder) {
@@ -104,12 +122,11 @@ public class AndroidTreeView {
 
 
     public View getView(int style) {
-        final ViewGroup view;
         if (style > 0) {
             ContextThemeWrapper newContext = new ContextThemeWrapper(mContext, style);
-            view = use2dScroll ? new TwoDScrollView(newContext) : new ScrollView(newContext);
+            mRootView = use2dScroll ? new TwoDScrollView(newContext) : new ScrollView(newContext);
         } else {
-            view = use2dScroll ? new TwoDScrollView(mContext) : new ScrollView(mContext);
+            mRootView = use2dScroll ? new TwoDScrollView(mContext) : new ScrollView(mContext);
         }
 
         Context containerContext = mContext;
@@ -120,7 +137,7 @@ public class AndroidTreeView {
 
         viewTreeItems.setId(R.id.tree_items);
         viewTreeItems.setOrientation(LinearLayout.VERTICAL);
-        view.addView(viewTreeItems);
+        mRootView.addView(viewTreeItems);
 
         mRoot.setViewHolder(new TreeNode.BaseNodeViewHolder(mContext) {
             @Override
@@ -135,7 +152,7 @@ public class AndroidTreeView {
         });
 
         expandNode(mRoot, false);
-        return view;
+        return mRootView;
     }
 
     public View getView() {
@@ -150,12 +167,15 @@ public class AndroidTreeView {
     }
 
     private void expandLevel(TreeNode node, int level) {
+        boolean lastAutoScrollEnabled = autoScrollToExpandedNode;
+        autoScrollToExpandedNode = false;
         if (node.getLevel() <= level) {
             expandNode(node, false);
         }
         for (TreeNode n : node.getChildren()) {
             expandLevel(n, level);
         }
+        autoScrollToExpandedNode = lastAutoScrollEnabled;
     }
 
     public void expandNode(TreeNode node) {
@@ -203,13 +223,21 @@ public class AndroidTreeView {
         }
     }
 
-    public void toggleNode(TreeNode node) {
+    public void toggleNodeExpansion(TreeNode node) {
         if (node.isExpanded()) {
             collapseNode(node, false);
         } else {
             expandNode(node, false);
         }
+    }
 
+    private void toggleLeafSelection(TreeNode node) {
+        if (node.isLeaf()) {
+            if (currentSelectedLeaf != null) {
+                selectNode(currentSelectedLeaf, false);
+            }
+            selectNode(node, !node.isSelected());
+        }
     }
 
     private void collapseNode(TreeNode node, final boolean includeSubnodes) {
@@ -251,6 +279,62 @@ public class AndroidTreeView {
             parentViewHolder.getNodeItemsView().setVisibility(View.VISIBLE);
         }
 
+        if (node != mRoot) {
+            if ((node.isLeaf() && autoScrollToSelectedLeafs) ||
+                    (node.isBranch() && autoScrollToExpandedNode)) {
+                scrollToNode(node);
+            }
+        }
+
+    }
+
+    public void expandNodeIncludingParents(TreeNode node, boolean autoScroll) {
+        List<TreeNode> parents = getParents(node);
+        for (TreeNode parentNode : parents) {
+            boolean lastAutoScrollEnabled = autoScrollToExpandedNode;
+            autoScrollToExpandedNode = false;
+            expandNode(parentNode);
+            autoScrollToExpandedNode = lastAutoScrollEnabled;
+        }
+        if (autoScroll) {
+            scrollToNode(node);
+        }
+    }
+
+    private List<TreeNode> getParents(TreeNode node) {
+        List<TreeNode> parents = new ArrayList<>();
+        TreeNode parent = node;
+        while (parent != mRoot) {
+            parents.add(0, parent);
+            parent = parent.getParent();
+        }
+        return parents;
+    }
+
+    public void scrollToNode(final TreeNode node) {
+        if (node.isInitialized()) {
+            if(node.getView().getHeight() == 0) {
+                node.getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        node.getView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        scrollToNode(node);
+                    }
+                });
+                return;
+            }
+            int yToScroll = ((int) node.getView().getY());
+            ViewGroup parent = ((ViewGroup) node.getView().getParent());
+            while (parent != mRootView) {
+                yToScroll += parent.getY();
+                parent = ((ViewGroup) parent.getParent());
+            }
+            if (mRootView instanceof TwoDScrollView) {
+                ((TwoDScrollView) mRootView).smoothScrollTo(0, yToScroll);
+            } else if (mRootView instanceof ScrollView) {
+                ((ScrollView) mRootView).smoothScrollTo(0, yToScroll);
+            }
+        }
     }
 
     private void addNode(ViewGroup container, final TreeNode n) {
@@ -264,13 +348,11 @@ public class AndroidTreeView {
         nodeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toggleAll(n);
                 if (n.getClickListener() != null) {
                     n.getClickListener().onClick(n, n.getValue());
                 } else if (nodeClickListener != null) {
                     nodeClickListener.onClick(n, n.getValue());
-                }
-                if (enableAutoToggle) {
-                    toggleNode(n);
                 }
             }
         });
@@ -278,13 +360,11 @@ public class AndroidTreeView {
         nodeView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                toggleAll(n);
                 if (n.getLongClickListener() != null) {
                     return n.getLongClickListener().onLongClick(n, n.getValue());
                 } else if (nodeLongClickListener != null) {
                     return nodeLongClickListener.onLongClick(n, n.getValue());
-                }
-                if (enableAutoToggle) {
-                    toggleNode(n);
                 }
                 return false;
             }
@@ -293,6 +373,15 @@ public class AndroidTreeView {
 
     //------------------------------------------------------------
     //  Selection methods
+
+    public void toggleAll(TreeNode node) {
+        if (enableExpansionAutoToggle) {
+            toggleNodeExpansion(node);
+        }
+        if (enableSelectionsAutoToggle) {
+            toggleLeafSelection(node);
+        }
+    }
 
     public void setSelectionModeEnabled(boolean selectionModeEnabled) {
         if (!selectionModeEnabled) {
@@ -370,6 +459,13 @@ public class AndroidTreeView {
 
     public void selectNode(TreeNode node, boolean selected) {
         if (mSelectionModeEnabled) {
+            if (node.isLeaf()) {
+                if (selected) {
+                    currentSelectedLeaf = node;
+                } else if (node == currentSelectedLeaf) {
+                    currentSelectedLeaf = null;
+                }
+            }
             node.setSelected(selected);
             toogleSelectionForNode(node, true);
         }
