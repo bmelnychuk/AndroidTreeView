@@ -162,8 +162,8 @@ public class AndroidTreeView {
         expandNode(node, false);
     }
 
-    public void collapseNode(TreeNode node) {
-        collapseNode(node, false);
+    public void collapseNode(TreeNode node, Boolean includeSubnodes) {
+        collapseNode(node, includeSubnodes);
     }
 
     public String getSaveState() {
