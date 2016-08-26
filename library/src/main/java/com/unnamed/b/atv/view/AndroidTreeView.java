@@ -166,6 +166,10 @@ public class AndroidTreeView {
         collapseNode(node, includeSubnodes);
     }
 
+    public void collapseNode(TreeNode node) {
+        collapseNode(node, false);
+    }
+
     public String getSaveState() {
         final StringBuilder builder = new StringBuilder();
         getSaveState(mRoot, builder);
