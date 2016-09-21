@@ -249,6 +249,9 @@ public class AndroidTreeView {
             expand(parentViewHolder.getNodeItemsView());
         } else {
             parentViewHolder.getNodeItemsView().setVisibility(View.VISIBLE);
+            parentViewHolder.getNodeItemsView().getLayoutParams().height =
+                    LinearLayout.LayoutParams.WRAP_CONTENT;
+            parentViewHolder.getNodeItemsView().requestLayout();
         }
 
     }
