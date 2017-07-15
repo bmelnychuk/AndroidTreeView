@@ -4,6 +4,8 @@ AndroidTreeView
 ### Recent changes
 
 
+Entire library code converted to Kotlin for better stability and reducing null pointer errors though could be used with java as well
+
 2D scrolling mode added, keep in mind this comes with few limitations: you won't be able not place views on right side like alignParentRight. Everything should be align left. Is not enabled by default
 
 
@@ -43,61 +45,60 @@ Tree view implementation for android
 
 **1)** Add library as a dependency to your project 
 
-```compile 'com.github.bmelnychuk:atv:1.2.+'```
+```compile 'com.github.bmelnychuk:atv:1.3.+'```
 
 **2)** Create your tree starting from root element. ```TreeNode.root()``` element will not be displayed so it doesn't require anything to be set.
-```java
-TreeNode root = TreeNode.root();
+```Kotlin
+val root = TreeNode.root()
 ```
 
 Create and add your nodes (use your custom object as constructor param)
-```java
- TreeNode parent = new TreeNode("MyParentNode");
- TreeNode child0 = new TreeNode("ChildNode0");
- TreeNode child1 = new TreeNode("ChildNode1");
- parent.addChildren(child0, child1);
- root.addChild(parent);
+```Kotlin
+ val parent = TreeNode("MyParentNode")
+ val child0 = TreeNode("ChildNode0")
+ val child1 = TreeNode("ChildNode1")
+ parent.addChildren(child0, child1)
+ root.addChild(parent)
 ```
 
 **3)** Add tree view to layout
-```java 
- AndroidTreeView tView = new AndroidTreeView(getActivity(), root);
- containerView.addView(tView.getView());
+```Kotlin 
+ val tView = AndroidTreeView(getActivity(), root)
+ containerView.addView(tView.getView())
 ``` 
 The simplest but not styled tree is ready. Now you can see ```parent``` node as root of your tree
 
 **4)** Custom view for nodes
 
 Extend ```TreeNode.BaseNodeViewHolder``` and overwrite ```createNodeView``` method to prepare custom view for node:
-```java
-public class MyHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem> {
+```Kotlin
+class MyHolder : TreeNode.BaseNodeViewHolder<IconTreeItem> {
     ...
-    @Override
-    public View createNodeView(TreeNode node, IconTreeItem value) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.layout_profile_node, null, false);
-        TextView tvValue = (TextView) view.findViewById(R.id.node_value);
-        tvValue.setText(value.text);
+    override fun createNodeView(val node, val value) : View?{
+        val inflater = LayoutInflater?.from(context)
+        val view = inflater?.inflate(R.layout.layout_profile_node, container, false)
+        val tvValue = view?.findViewById(R.id.node_value) as? TextView
+        tvValue.setText(value.text)
         
-        return view;
+        return view
     }
     ...
-    public static class IconTreeItem {
-        public int icon;
-        public String text;
+    class IconTreeItem {
+        val icon
+        val text
     }
 }
 ```
 
 **5)** Connect view holder with node 
-```java 
-  IconTreeItem nodeItem = new IconTreeItem();
-  TreeNode child1 = new TreeNode(nodeItem).setViewHolder(new MyHolder(mContext));
+```Kotlin 
+  val nodeItem = IconTreeItem()
+  val child1 = TreeNode(nodeItem).setViewHolder(new MyHolder(mContext))
 ```
 
 **6)** Consider using 
-```java 
-TreeNode.setClickListener(TreeNodeClickListener listener);
+```Kotlin 
+TreeNode.setClickListener(TreeNodeClickListener listener)
 AndroidTreeView.setDefaultViewHolder
 AndroidTreeView.setDefaultNodeClickListener
 ...
