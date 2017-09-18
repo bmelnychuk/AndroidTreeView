@@ -53,6 +53,23 @@ public class TreeNode {
         return this;
     }
 
+    /**
+     * Adds a child node at give position
+     * @param childNode
+     * @param position Fist position is 0. If -1, child is inserted at the end
+     * @return
+     */
+    public TreeNode addChild(TreeNode childNode, int position) {
+        childNode.mParent = this;
+        childNode.mId = generateId();
+
+        if(position == -1 || position > children.size())
+            position = childNode.size();
+
+        children.add(position, childNode);
+        return this;
+    }
+
     public TreeNode addChildren(TreeNode... nodes) {
         for (TreeNode n : nodes) {
             addChild(n);
