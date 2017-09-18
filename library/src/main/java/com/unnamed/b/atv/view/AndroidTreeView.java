@@ -238,7 +238,7 @@ public class AndroidTreeView {
         parentViewHolder.toggle(true);
 
         for (final TreeNode n : node.getChildren()) {
-            addNode(parentViewHolder.getNodeItemsView(), n);
+            addNode(parentViewHolder.getNodeItemsView(), n, -1);
 
             if (n.isExpanded() || includeSubnodes) {
                 expandNode(n, includeSubnodes);
@@ -253,10 +253,20 @@ public class AndroidTreeView {
 
     }
 
-    private void addNode(ViewGroup container, final TreeNode n) {
+    /**
+     * Add the view corresponding to TreeNode to the View Group
+     * @param container
+     * @param n
+     */
+    private void addNode(ViewGroup container, final TreeNode n, int index) {
         final TreeNode.BaseNodeViewHolder viewHolder = getViewHolderForNode(n);
         final View nodeView = viewHolder.getView();
-        container.addView(nodeView);
+
+        if(index == -1)
+            container.addView(nodeView);
+        else
+            container.addView(nodeView, index);
+
         if (mSelectionModeEnabled) {
             viewHolder.toggleSelectionMode(mSelectionModeEnabled);
         }
@@ -467,11 +477,26 @@ public class AndroidTreeView {
     //-----------------------------------------------------------------
     //Add / Remove
 
+    /**
+     * Add the node in the end
+     * @param parent
+     * @param nodeToAdd
+     */
     public void addNode(TreeNode parent, final TreeNode nodeToAdd) {
-        parent.addChild(nodeToAdd);
+        addNode(parent, nodeToAdd, -1);
+    }
+
+    /**
+     * Adds the node at given position
+     * @param parent
+     * @param nodeToAdd
+     * @param position if -1, node is add in the last
+     */
+    public void addNode(TreeNode parent, final TreeNode nodeToAdd, int position) {
+        parent.addChild(nodeToAdd, position);
         if (parent.isExpanded()) {
             final TreeNode.BaseNodeViewHolder parentViewHolder = getViewHolderForNode(parent);
-            addNode(parentViewHolder.getNodeItemsView(), nodeToAdd);
+            addNode(parentViewHolder.getNodeItemsView(), nodeToAdd, position);
         }
     }
 
