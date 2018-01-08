@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
@@ -34,7 +35,7 @@ public class AndroidTreeView {
     private TreeNode.TreeNodeClickListener nodeClickListener;
     private TreeNode.TreeNodeLongClickListener nodeLongClickListener;
     private boolean mSelectionModeEnabled;
-    private boolean mUseDefaultAnimation = false;
+    private boolean mUseDefaultAnimation = true;
     private boolean use2dScroll = false;
     private boolean enableAutoToggle = true;
 
@@ -434,8 +435,8 @@ public class AndroidTreeView {
             }
         };
 
-        // 1dp/ms
-        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((long) v.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
+        a.setInterpolator(new AccelerateDecelerateInterpolator());
         v.startAnimation(a);
     }
 
@@ -459,8 +460,8 @@ public class AndroidTreeView {
             }
         };
 
-        // 1dp/ms
-        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((long) v.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
+        a.setInterpolator(new AccelerateDecelerateInterpolator());
         v.startAnimation(a);
     }
 
