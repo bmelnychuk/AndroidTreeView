@@ -261,7 +261,7 @@ public class AndroidTreeView {
             viewHolder.toggleSelectionMode(mSelectionModeEnabled);
         }
 
-        nodeView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (n.getClickListener() != null) {
@@ -275,7 +275,7 @@ public class AndroidTreeView {
             }
         });
 
-        nodeView.setOnLongClickListener(new View.OnLongClickListener() {
+        viewHolder.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if (n.getLongClickListener() != null) {
