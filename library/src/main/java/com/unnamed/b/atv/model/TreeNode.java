@@ -251,8 +251,8 @@ public class TreeNode {
             nodeView.setOnLongClickListener(listener);
         }
 
-        public void setTreeViev(AndroidTreeView treeViev) {
-            this.tView = treeViev;
+        public void setTreeView(AndroidTreeView treeView) {
+            this.tView = treeView;
         }
 
         public AndroidTreeView getTreeView() {
