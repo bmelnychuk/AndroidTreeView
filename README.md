@@ -43,7 +43,7 @@ Tree view implementation for android
 
 **1)** Add library as a dependency to your project 
 
-```compile 'com.github.bmelnychuk:atv:1.2.+'```
+```implementation 'com.github.bmelnychuk:atv:1.2.+'```
 
 **2)** Create your tree starting from root element. ```TreeNode.root()``` element will not be displayed so it doesn't require anything to be set.
 ```java
