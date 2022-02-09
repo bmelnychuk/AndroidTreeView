@@ -1,3 +1,5 @@
+## This project is deprecated. You can still use it as it. Let me know if someone is interested in supporting it.
+
 AndroidTreeView
 ====================
 
