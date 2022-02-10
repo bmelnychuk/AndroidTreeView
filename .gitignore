@@ -24,3 +24,5 @@ local.properties
 # Gradle
 .gradle
 build/
+.idea/instapk.xml
+instapk.log*
