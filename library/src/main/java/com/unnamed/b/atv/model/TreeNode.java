@@ -222,6 +222,7 @@ public class TreeNode {
     public static abstract class BaseNodeViewHolder<E> {
         protected AndroidTreeView tView;
         protected TreeNode mNode;
+        private View nodeView;
         private View mView;
         protected int containerStyle;
         protected Context context;
@@ -234,7 +235,7 @@ public class TreeNode {
             if (mView != null) {
                 return mView;
             }
-            final View nodeView = getNodeView();
+            nodeView = getNodeView();
             final TreeNodeWrapperView nodeWrapperView = new TreeNodeWrapperView(nodeView.getContext(), getContainerStyle());
             nodeWrapperView.insertNodeView(nodeView);
             mView = nodeWrapperView;
@@ -242,8 +243,16 @@ public class TreeNode {
             return mView;
         }
 
-        public void setTreeViev(AndroidTreeView treeViev) {
-            this.tView = treeViev;
+        public void setOnClickListener(View.OnClickListener listener) {
+            nodeView.setOnClickListener(listener);
+        }
+
+        public void setOnLongClickListener(View.OnLongClickListener listener) {
+            nodeView.setOnLongClickListener(listener);
+        }
+
+        public void setTreeView(AndroidTreeView treeView) {
+            this.tView = treeView;
         }
 
         public AndroidTreeView getTreeView() {

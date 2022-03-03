@@ -261,7 +261,7 @@ public class AndroidTreeView {
             viewHolder.toggleSelectionMode(mSelectionModeEnabled);
         }
 
-        nodeView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (n.getClickListener() != null) {
@@ -275,7 +275,7 @@ public class AndroidTreeView {
             }
         });
 
-        nodeView.setOnLongClickListener(new View.OnLongClickListener() {
+        viewHolder.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if (n.getLongClickListener() != null) {
@@ -408,7 +408,7 @@ public class AndroidTreeView {
             viewHolder.setContainerStyle(containerStyle);
         }
         if (viewHolder.getTreeView() == null) {
-            viewHolder.setTreeViev(this);
+            viewHolder.setTreeView(this);
         }
         return viewHolder;
     }
