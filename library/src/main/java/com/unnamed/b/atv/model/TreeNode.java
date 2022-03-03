@@ -1,6 +1,7 @@
 package com.unnamed.b.atv.model;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -97,6 +98,10 @@ public class TreeNode {
         return size() == 0;
     }
 
+    public boolean isBranch() {
+        return size() > 0;
+    }
+
     public Object getValue() {
         return mValue;
     }
@@ -112,6 +117,9 @@ public class TreeNode {
 
     public void setSelected(boolean selected) {
         mSelected = selected;
+        if(mViewHolder != null) {
+            mViewHolder.toggleSelection(mSelected);
+        }
     }
 
     public boolean isSelected() {
@@ -191,6 +199,18 @@ public class TreeNode {
         return mViewHolder;
     }
 
+    public boolean isInitialized() {
+        return mViewHolder != null ? mViewHolder.isInitialized() : false;
+    }
+
+    public View getView() {
+        return mViewHolder != null ? mViewHolder.getView() : null;
+    }
+
+    public Boolean hasView() {
+        return getView() != null;
+    }
+
     public boolean isFirstChild() {
         if (!isRoot()) {
             List<TreeNode> parentChildren = mParent.children;
@@ -225,9 +245,11 @@ public class TreeNode {
         private View mView;
         protected int containerStyle;
         protected Context context;
+        protected LayoutInflater layoutInflater;
 
         public BaseNodeViewHolder(Context context) {
             this.context = context;
+            this.layoutInflater = LayoutInflater.from(context);
         }
 
         public View getView() {
@@ -279,6 +301,10 @@ public class TreeNode {
 
         public void toggleSelectionMode(boolean editModeEnabled) {
             // empty
+        }
+
+        public void toggleSelection(boolean isSelected) {
+
         }
     }
 }

@@ -26,6 +26,8 @@ Tree view implementation for android
 + 3. Save state after rotation
 + 4. Selection mode for nodes
 + 5. Dynamic add/remove node
++ 6. Auto scroll to selected leaf
++ 7. Auto scroll to expanded node
 
 ### Known Limitations
 + For Android 4.0 (+/- nearest version) if you have too deep view hierarchy and with tree its easily possible, your app may crash
